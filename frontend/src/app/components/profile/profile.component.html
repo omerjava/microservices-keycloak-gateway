@@ -1,0 +1,28 @@
+<app-header></app-header>
+
+<div *ngIf="!editing">
+    <h2>User Profile</h2>
+    <p><strong>Full name:</strong> {{ userProfile?.fullName }}</p>
+    <p><strong>Address:</strong> {{ userProfile?.address }}</p>
+    <p><strong>Country:</strong> {{ userProfile?.country }}</p>
+    <p><strong>Age:</strong> {{ userProfile?.age }}</p>
+    <button (click)="toggleEdit()">Edit</button>
+</div>
+
+<form *ngIf="editing" [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+    <h2>Edit Profile</h2>
+    <label>Full Name:
+        <input type="text" formControlName="fullName" />
+    </label><br />
+    <label>Address:
+        <input type="text" formControlName="address" />
+    </label><br />
+    <label>Country:
+        <input type="text" formControlName="country" />
+    </label><br />
+    <label>Age:
+        <input type="number" formControlName="age" />
+    </label><br />
+    <button type="submit">Save</button>
+    <button type="button" (click)="toggleEdit()">Cancel</button>
+</form>

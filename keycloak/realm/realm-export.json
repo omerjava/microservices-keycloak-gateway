@@ -1,0 +1,137 @@
+{
+    "realm": "ofk-micro",
+    "enabled": true,
+    "clients": [
+        {
+            "clientId": "frontend-client",
+            "publicClient": true,
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ],
+            "protocol": "openid-connect",
+            "enabled": true
+        }
+    ],
+    "roles": {
+        "realm": [
+            {
+                "name": "ROLE_USER",
+                "description": "Standard user role"
+            },
+            {
+                "name": "ROLE_ADMIN",
+                "description": "Administrator role"
+            }
+        ]
+    },
+    "users": [
+        {
+            "username": "user1",
+            "enabled": true,
+            "emailVerified": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password1",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "ROLE_USER"
+            ]
+        },
+        {
+            "username": "user2",
+            "enabled": true,
+            "emailVerified": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password2",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "ROLE_USER"
+            ]
+        },
+        {
+            "username": "user3",
+            "enabled": true,
+            "emailVerified": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password3",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "ROLE_USER"
+            ]
+        },
+        {
+            "username": "user4",
+            "enabled": true,
+            "emailVerified": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password4",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "ROLE_USER"
+            ]
+        },
+        {
+            "username": "user5",
+            "enabled": true,
+            "emailVerified": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password5",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "ROLE_USER"
+            ]
+        },
+        {
+            "username": "admin1",
+            "enabled": true,
+            "emailVerified": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "adminpass1",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "ROLE_ADMIN"
+            ]
+        },
+        {
+            "username": "admin2",
+            "enabled": true,
+            "emailVerified": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "adminpass2",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "ROLE_ADMIN"
+            ]
+        }
+    ]
+}

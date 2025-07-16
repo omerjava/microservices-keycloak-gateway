@@ -1,0 +1,148 @@
+services:
+  keycloak-db:
+    image: postgres:15
+    container_name: keycloak-db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: postgres_keycloak
+      POSTGRES_PASSWORD: password_keycloak
+    volumes:
+      - keycloak-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ofk-network
+
+  keycloak-service:
+    image: quay.io/keycloak/keycloak:24.0.1
+    container_name: keycloak-micro
+    command:
+      - start-dev
+      - --import-realm
+    volumes:
+      - ./keycloak/realm:/opt/keycloak/data/import
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: postgres_keycloak
+      KC_DB_PASSWORD: password_keycloak
+      KC_REALM_NAME: ofk-micro
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_keycloak
+    depends_on:
+      - keycloak-db
+    ports:
+      - "8180:8080"
+    networks:
+      - ofk-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 10s
+      timeout: 45s
+      retries: 10
+      start_period: 30s
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - ofk-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
+      interval: 10s
+      timeout: 45s
+      retries: 10
+      start_period: 30s
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root11
+      MYSQL_DATABASE: postdb
+      MYSQL_USER: user_ofk
+      MYSQL_PASSWORD: password_ofk
+    ports:
+      - "3506:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - ofk-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 45s
+      retries: 10
+      start_period: 30s
+
+  gateway:
+    build:
+      context: ./gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - keycloak-service
+      - userprofile
+      - post
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - ofk-network
+
+  userprofile:
+    build:
+      context: ./userprofile
+    container_name: userprofile-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - elasticsearch
+    networks:
+      - ofk-network
+
+  post:
+    build:
+      context: ./post-service
+    container_name: post-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    env_file:
+      - ./post-service/.env.prod
+    environment:
+      - NODE_ENV=prod
+    networks:
+      - ofk-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - gateway
+      - keycloak-service
+    networks:
+      - ofk-network
+
+volumes:
+  keycloak-data:
+  esdata:
+  mysqldata:
+
+
+networks:
+  ofk-network:
+    driver: bridge

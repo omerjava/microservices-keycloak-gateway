@@ -1,0 +1,6 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+    active: dev  # Default profile (will be overridden via Docker compose environment)

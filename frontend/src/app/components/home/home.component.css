@@ -1,0 +1,28 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 1rem;
+}
+
+form div {
+    margin-bottom: 1rem;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 0.5rem 1rem;
+}
+
+.post-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}

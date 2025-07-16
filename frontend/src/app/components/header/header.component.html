@@ -1,0 +1,14 @@
+<div class="header">
+    <span *ngIf="isLoggedIn">
+        Logged in as <strong>{{ username }}</strong>
+    </span>
+
+    <div class="header-buttons">
+        <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+        <button *ngIf="!isLoggedIn" (click)="register()">Register</button>
+
+        <button *ngIf="isLoggedIn" (click)="goToHome()">Home</button>
+        <button *ngIf="isLoggedIn" (click)="goToProfile()">My Profile</button>
+        <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+    </div>
+</div>
