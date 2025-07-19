@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         String profile = environment.getActiveProfiles()[0]; // assuming only one active profile
 
-        String frontendPath = profile.equals("prod") ? "/localhost:4200/**" : "/localhost:4200/**";
+        String frontendPath = profile.equals("prod") ? "/91.99.230.244:4200/**" : "/localhost:4200/**";
 
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)

@@ -1,0 +1,34 @@
+name: Deploy to Hetzner
+
+on:
+  push:
+    branches:
+      - master  # or your chosen deployment branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy project files to Hetzner
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ofk-app
+
+      - name: Deploy with Docker Compose
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd /root/ofk-app
+            docker compose down
+            docker compose up -d --build
+            docker system prune -f -a --volumes -y
+          EOF

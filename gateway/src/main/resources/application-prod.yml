@@ -10,7 +10,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak-service:8180/realms/ofk-micro
+          issuer-uri: http://91.99.230.244:8180/realms/ofk-micro
 
   cloud:
     gateway:
@@ -44,7 +44,7 @@ spring:
           globalcors:
             corsConfigurations:
               '[/**]':
-                allowedOrigins: "http://frontend:4200,http://localhost:4200"
+                allowedOrigins: "http://91.99.230.244:4200,http://localhost:4200"
                 allowedMethods:
                   - GET
                   - POST
