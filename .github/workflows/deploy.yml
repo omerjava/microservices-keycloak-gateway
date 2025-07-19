@@ -3,7 +3,7 @@ name: Deploy to Hetzner
 on:
   push:
     branches:
-      - master  # Change if you use a different deploy branch
+      - master
 
 jobs:
   deploy:
