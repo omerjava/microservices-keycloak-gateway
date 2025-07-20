@@ -1,0 +1,26 @@
+services:
+  keycloak-service:
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: postgres_keycloak
+      KC_DB_PASSWORD: password_keycloak
+      KC_REALM_NAME: ofk-micro
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_keycloak
+    ports:
+      - "8180:8080" # (optional, can also be in base)
+  gateway:
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+  userprofile:
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+  post:
+    env_file:
+      - ./post-service/.env.dev
+    environment:
+      - NODE_ENV=dev

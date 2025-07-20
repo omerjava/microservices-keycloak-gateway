@@ -1,0 +1,24 @@
+services:
+  keycloak-service:
+    command:
+      - start
+      - --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: postgres_keycloak
+      KC_DB_PASSWORD: password_keycloak
+      KC_REALM_NAME: ofk-micro
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_keycloak
+  gateway:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+  userprofile:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+  post:
+    env_file:
+      - ./post-service/.env.prod
+    environment:
+      - NODE_ENV=prod

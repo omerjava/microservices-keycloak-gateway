@@ -12,27 +12,22 @@ services:
       - "5432:5432"
     networks:
       - ofk-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres_keycloak" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   keycloak-service:
     image: quay.io/keycloak/keycloak:24.0.1
     container_name: keycloak-micro
-    command:
-      - start-dev
-      - --import-realm
     volumes:
       - ./keycloak/realm:/opt/keycloak/data/import
-    environment:
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
-      KC_DB_USERNAME: postgres_keycloak
-      KC_DB_PASSWORD: password_keycloak
-      KC_REALM_NAME: ofk-micro
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin_keycloak
-    depends_on:
-      - keycloak-db
     ports:
       - "8180:8080"
+    depends_on:
+      - keycloak-db
     networks:
       - ofk-network
     healthcheck:
@@ -92,8 +87,6 @@ services:
       - keycloak-service
       - userprofile
       - post
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
     networks:
       - ofk-network
 
@@ -103,8 +96,6 @@ services:
     container_name: userprofile-service
     ports:
       - "8081:8081"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
     depends_on:
       - elasticsearch
     networks:
@@ -118,10 +109,6 @@ services:
       - "3000:3000"
     depends_on:
       - mysql
-    env_file:
-      - ./post-service/.env.prod
-    environment:
-      - NODE_ENV=prod
     networks:
       - ofk-network
 
