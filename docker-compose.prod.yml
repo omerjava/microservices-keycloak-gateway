@@ -5,6 +5,7 @@ services:
       - --import-realm
     environment:
       KC_DB: postgres
+      KC_HOSTNAME: 91.99.230.244
       KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
       KC_DB_USERNAME: postgres_keycloak
       KC_DB_PASSWORD: password_keycloak
