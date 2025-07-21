@@ -1,7 +1,7 @@
 services:
   keycloak-service:
     command:
-      - start
+      - start-dev
       - --import-realm
     environment:
       KC_DB: postgres
@@ -12,6 +12,7 @@ services:
       KC_REALM_NAME: ofk-micro
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin_keycloak
+      KC_HOSTNAME_STRICT_HTTPS: false
   gateway:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
